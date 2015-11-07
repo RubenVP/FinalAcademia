@@ -72,10 +72,8 @@
 						        <td class="text-center hidden-xs">${question.userEntity.username}</td>
 						    </tr>
 						</c:forEach>
-						
 				    </tbody>
 				</table>
-				
 			</div>
 			
 		</div>

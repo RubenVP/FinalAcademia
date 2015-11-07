@@ -127,4 +127,10 @@ public class QuestionsService {
 		return questionsRepository.getCustomSearch(text);
 	}
 
+	public void setAnswerAsHelpful(int commnetId) {
+		System.out.println("[SERVICE] set Answer As Helpful: " + commnetId);
+
+		questionsRepository.setAnswerAsHelpful(commnetId);
+	}
+
 }

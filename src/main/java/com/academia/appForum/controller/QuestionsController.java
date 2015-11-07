@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -150,19 +151,11 @@ public class QuestionsController {
 		}
 
 		final QuestionEntity questionEntity = questionsService.getQuestionById(questionId);
-
+		
+		comment.setHelpful(false);
 		questionsService.addAnswer(comment, questionEntity);
 		messageService.sendMessegeQuestionAndswered(questionEntity);
 		questionsService.updateQuestionToAnswered(questionId);
-
-		// creates a simple e-mail object
-		// SimpleMailMessage email = new SimpleMailMessage();
-		// email.setTo("ruben.valderrabano@gmail.com");
-		// email.setSubject("Your question" + questionEntity.getTitle() + " has
-		// been answered");
-		// email.setText("prueba");
-		// // sends the e-mail
-		// mailSender.send(email);
 
 		final List<CommentEntity> commentsList = questionsService.getAllAnswersByQuestion(questionEntity);
 		modelAndView.addObject("commentsList", commentsList);
@@ -263,6 +256,25 @@ public class QuestionsController {
 
 		modelAndView.setViewName("app/forum");
 		modelAndView.addObject("questions", questions);
+
+		return modelAndView;
+	}
+	
+	
+	@RequestMapping(value = "/answerHelpful/{commnetId}/{question}", method = RequestMethod.GET)
+	public ModelAndView setAnswerAsHelpful(@PathVariable("commnetId") int commnetId,@PathVariable("question") int questionId) {
+		System.out.println("[CONTROLLER] set Answer As Helpful: " + commnetId);
+
+		questionsService.setAnswerAsHelpful(commnetId);
+		QuestionEntity question = questionsService.getQuestionById(questionId);
+
+		final List<CommentEntity> commentsList = questionsService.getAllAnswersByQuestion(question);
+
+		final ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("app/view-question");
+		modelAndView.addObject("commentsList", commentsList);
+		modelAndView.addObject("question", question);
+		modelAndView.addObject("comment", new CommentEntity());
 
 		return modelAndView;
 	}

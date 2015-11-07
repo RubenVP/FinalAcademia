@@ -37,6 +37,17 @@ public class CommentEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date answerDate;
 	
+	@Column(name = "HELPFUL", columnDefinition = "BOOLEAN")
+	private Boolean helpful;
+
+	public Boolean getHelpful() {
+		return helpful;
+	}
+
+	public void setHelpful(Boolean helpful) {
+		this.helpful = helpful;
+	}
+
 	public Date getAnswerDate() {
 		return answerDate;
 	}

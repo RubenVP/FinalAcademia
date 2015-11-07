@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS COMMENT (
 	USERS_ID INTEGER NOT NULL,
 	DESCRIPTION VARCHAR(2550) NOT NULL,
 	ANSWER_DATE TIMESTAMP NOT NULL,
+	HELPFUL BOOLEAN NOT NULL,
 	FOREIGN KEY (QUESTION_ID) REFERENCES QUESTION(QUESTION_ID),
 	FOREIGN KEY (USERS_ID) REFERENCES USERS(USERS_ID)
 );
@@ -51,9 +52,11 @@ CREATE TABLE IF NOT EXISTS MESSAGE (
 );
 
 INSERT INTO users(username, password, enabled, name, email, image_url)
-VALUES ('admin','admin123', true, 'Administrator', 'ruben.valderrabano@softtek.com', 'C:\Users\ruben.valderrabano\Desktop\spring-tool-suite-3.7.0.RELEASE-e4.5-win32-x86_64\sts-bundle\pivotal-tc-server-developer-3.1.1.RELEASE\base-instance\wtpwebapps\appacademy\user.PNG');
+VALUES ('admin2','admin123', true, 'SuperAdmin', 'super.admin@softtek.com', 'C:\Users\CURSO\Documents\workspace-sts-3.3.0.RELEASE\user.PNG');
+INSERT INTO users(username, password, enabled, name, email, image_url)
+VALUES ('admin','admin123', true, 'Administrator', 'ruben.valderrabano@softtek.com', 'C:\Users\CURSO\Documents\workspace-sts-3.3.0.RELEASE\user.PNG');
 INSERT INTO users(username, password, enabled, name, last_name, email, image_url)
-VALUES ('user','user123', true, 'Ruben', 'Valderrabano', 'ruben.valderrabano@softtek.com', 'C:\Users\ruben.valderrabano\Desktop\spring-tool-suite-3.7.0.RELEASE-e4.5-win32-x86_64\sts-bundle\pivotal-tc-server-developer-3.1.1.RELEASE\base-instance\wtpwebapps\appacademy\user.PNG');
+VALUES ('user','user123', true, 'Ruben', 'Valderrabano', 'ruben.valderrabano@softtek.com', 'C:\Users\CURSO\Documents\workspace-sts-3.3.0.RELEASE\user.PNG');
 
 INSERT INTO user_roles (username, role)
 VALUES ('admin', 'ROLE_ADMIN');
@@ -61,10 +64,10 @@ INSERT INTO user_roles (username, role)
 VALUES ('user', 'ROLE_USER');
 
 INSERT INTO QUESTION (CATEGORY, TITLE, DESCRIPTION, ANSWERED, USERS_ID, CREATE_DATE)
-VALUES ('SERVICE', 'Question 1', 'I relly do not have isea ehat to put in here', false, 1, NOW());
+VALUES ('SERVICE', 'What is an academy?', 'Academies are state-maintained but independently-run schools in England set up with the help of outside sponsors. They have more freedoms than schools under local authority control.', false, 1, NOW());
 
 INSERT INTO QUESTION (CATEGORY, TITLE, DESCRIPTION, ANSWERED, USERS_ID, CREATE_DATE)
-VALUES ('APP', 'Question 2', 'I relly do not have isea ehat to put in here again', false, 1, NOW());
+VALUES ('APP', 'Whats the app about?', 'Can anyone explain me this app please?', false, 1, NOW());
 
 INSERT INTO QUESTION (CATEGORY, TITLE, DESCRIPTION, ANSWERED, USERS_ID, CREATE_DATE)
-VALUES ('PRODUCT', 'Question 2', 'Once again I do not have isea ehat to put in here', false, 1, NOW());
+VALUES ('PRODUCT', 'What is your Product?', 'I unserstand that you sell some books and other products, can someone explain me more? ', false, 1, NOW());

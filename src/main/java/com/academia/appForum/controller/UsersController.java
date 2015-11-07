@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -84,14 +85,16 @@ public class UsersController {
 
 		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + uploadPath);
 
-		if (!user.getFileData().isEmpty()) {
-			final File uploadDir = new File(uploadPath);
-			if (!uploadDir.exists()) {
-				uploadDir.mkdir();
-			}
+		final File uploadDir = new File(uploadPath);
+		if (!uploadDir.exists()) {
+			uploadDir.mkdir();
+		}
 
-			// file processing
-			final String fileName = new File(user.getFileData().getOriginalFilename()).getName();
+		// file processing
+		String fileName = new File(user.getFileData().getOriginalFilename()).getName();
+		
+		if (!user.getFileData().isEmpty() || isAllowedExtension(fileName, new String[]{"png", "jpg"})) {
+			
 			final String filePath = uploadPath + "/" + fileName;
 
 			final File storeFile = new File(filePath);
@@ -107,8 +110,6 @@ public class UsersController {
 			user.setImageUrl(filePath);
 		}
 
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-
 		usersService.addNewUser(user);
 		usersService.addNewUserRole(user);
 
@@ -119,4 +120,15 @@ public class UsersController {
 
 		return model;
 	}
+	
+	private boolean isAllowedExtension(String fileName,String [] extensions){
+
+		for(String extension : extensions){
+			if(FilenameUtils.isExtension(fileName.toLowerCase(), extension)){
+				return true;
+			}
+		}
+		return false; 
+
+	} 
 }

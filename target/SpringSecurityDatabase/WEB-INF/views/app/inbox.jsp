@@ -3,37 +3,105 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>App Forum</title>
+	
+	<!-- Bootstrap Core CSS -->
+    <link href="resources/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="resources/css/custom.css" rel="stylesheet">
+    
 </head>
 <body>
 
-	<form action="/SpringSecurityDatabase/forum/formInbox" method="post">
-		<select name="state">
-			<option value="unanswered">Unanswered</option>
-			<option value="answered">Answered</option>
-		</select>
-		<input type="submit" value="Whatch Questions"/>
-	</form>
+   <!-- Navigation -->
+    <jsp:include page="navbar.jsp"></jsp:include>
 
-	<c:forEach items="${questions}" var="question">
-		<p>Date: <c:out value="${question.createDate}"></c:out></p>
-		<p>ID: <c:out value="${question.id}"></c:out></p>
-		<p>CATEGORY: <c:out value="${question.category}"></c:out></p>
-		<p>QUESTION: <c:out value="${question.title}"></c:out></p>
-		<p>ANSWERED: <c:out value="${question.answered}"></c:out></p>
-		<p>ASKED BY: <c:out value="${question.userEntity.username}"></c:out></p>
+    <!-- Page Content -->
+    <div class="container">
 
-		<form action="/SpringSecurityDatabase/forum/question" method="get">
-			<input type="hidden" name="id" value="${question.id}">
-			<input type="submit" value="Watch Question"/>
-		</form>
+        <div class="row">
+        
+			<div class="col-lg-12">
+  					
+				<form action="/SpringSecurityDatabase/forum/formInbox" method="post" class="form-inline">
+					<div class="form-group">
+						<label for="state">Select:</label>
+						<select name="state" class="form-control">
+							<option value="unanswered">Unanswered</option>
+							<option value="answered">Answered</option>
+						</select>
+					</div>
+					<input type="submit" class="btn btn-info form-control" value="Whatch Questions"/>
+				</form>
 			
-	</c:forEach>
-	
-		
+				<table class="table forum table-striped">
+					<thead>
+				  		<tr>
+				  			<th class="cell-stat text-center">Answered</th>
+					        <th class="cell-stat-2x">
+					        	<h3>Answered/unanswered Questions</h3>
+					        </th>
+					        <th class="cell-stat text-center hidden-xs">Date</th>
+					        <th class="cell-stat text-center hidden-xs">Category</th>
+					        <th class="cell-stat-2x text-center hidden-xs">By</th>
+				      	</tr>
+				    </thead>
+				    <tbody>
+				    
+				    	<c:forEach items="${questions}" var="question">
+						    <tr>
+						    	<td class="text-center">
+						    		<c:if test="${question.answered eq true}">
+							    		<h3><span class="glyphicon glyphicon-ok text-success"></span></h3>
+						    		</c:if>
+						    		<c:if test="${question.answered eq false}">
+						    			<h3><span class="glyphicon glyphicon-remove text-danger"></span></h3>
+						    		</c:if>
+						    	</td>
+						        <td>
+						        	<h4><a href="/SpringSecurityDatabase/forum/question?questionId=${question.id}">${question.title}</a></h4>
+						        </td>
+						        <td class="text-center hidden-xs"><small><i class="fa fa-clock-o"></i>${question.createDate}</small></td>
+						        <td class="text-center hidden-xs">${question.category}</td>
+						        <td class="text-center hidden-xs">${question.userEntity.username}</td>
+						    </tr>
+						</c:forEach>
+						
+				    </tbody>
+				</table>
+				
+			</div>
+			
+		</div>
+        <!-- /.row -->
+
+        <hr>
+
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Academy App 2015</p>
+                </div>
+            </div>
+            <!-- /.row -->
+        </footer>
+
+    </div>
+    <!-- /.container -->
+
+    <!-- jQuery -->
+    <script src="resourses/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="resourses/js/bootstrap.min.js"></script>
+
 </body>
+
 </html>

@@ -99,7 +99,7 @@ public class QuestionsRepository {
 	public List<QuestionEntity> getAnsweredQuestions() {
 
 		System.out.println("[REPO] get unaswered questions");
-
+										
 		return entityManager.createQuery("SELECT Q FROM QuestionEntity Q WHERE Q.answered = true", QuestionEntity.class)
 				.getResultList();
 	}
@@ -120,5 +120,12 @@ public class QuestionsRepository {
 		return entityManager
 				.createQuery("SELECT Q FROM QuestionEntity Q WHERE Q.title Like :text", QuestionEntity.class)
 				.setParameter("text", '%' + text + '%').getResultList();
+	}
+
+	public void setAnswerAsHelpful(int commnetId) {
+		System.out.println("[REPO] set Answer As Helpful: " + commnetId);
+		entityManager.createQuery("UPDATE CommentEntity C SET C.helpful = true WHERE C.id = :commnetId",
+				CommentEntity.class).setParameter("commnetId", commnetId).getResultList();
+	
 	}
 }

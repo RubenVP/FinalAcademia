@@ -1,11 +1,13 @@
 CREATE  TABLE IF NOT EXISTS USERS (
   USERS_ID INTEGER IDENTITY PRIMARY KEY, 
-  USERNAME VARCHAR(45) NOT NULL,
-  password VARCHAR(45) NOT NULL,
+  USERNAME VARCHAR(50) NOT NULL,
+  password VARCHAR(128) NOT NULL,
   name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50),
   email VARCHAR(255) NOT NULL,
-  enabled BOOLEAN NOT NULL
+  enabled BOOLEAN NOT NULL,
+  image_url VARCHAR(255),
+  UNIQUE (USERNAME)
 );
 
 CREATE TABLE IF NOT EXISTS USER_ROLES (
@@ -16,9 +18,9 @@ CREATE TABLE IF NOT EXISTS USER_ROLES (
 
 CREATE TABLE IF NOT EXISTS QUESTION (
 	QUESTION_ID INTEGER IDENTITY PRIMARY KEY, 
-	CATEGORY_ID VARCHAR(20) NOT NULL,
-	TITLE VARCHAR(100) NOT NULL,
-	DESCRIPTION VARCHAR(255) NOT NULL,
+	CATEGORY VARCHAR(20) NOT NULL,
+	TITLE VARCHAR(255) NOT NULL,
+	DESCRIPTION VARCHAR(2550) NOT NULL,
 	ANSWERED BOOLEAN NOT NULL,
 	USERS_ID INTEGER NOT NULL,
 	CREATE_DATE TIMESTAMP NOT NULL,
@@ -29,7 +31,7 @@ CREATE TABLE IF NOT EXISTS COMMENT (
 	COMMENT_ID INTEGER IDENTITY PRIMARY KEY,
 	QUESTION_ID INTEGER NOT NULL,
 	USERS_ID INTEGER NOT NULL,
-	DESCRIPTION VARCHAR(255) NOT NULL,
+	DESCRIPTION VARCHAR(2550) NOT NULL,
 	ANSWER_DATE TIMESTAMP NOT NULL,
 	FOREIGN KEY (QUESTION_ID) REFERENCES QUESTION(QUESTION_ID),
 	FOREIGN KEY (USERS_ID) REFERENCES USERS(USERS_ID)
@@ -48,21 +50,21 @@ CREATE TABLE IF NOT EXISTS MESSAGE (
 	FOREIGN KEY (RECIPIENT_USER_ID) REFERENCES USERS(USERS_ID)
 );
 
-INSERT INTO users(username, password, enabled, name, email)
-VALUES ('admin','admin123', true, 'Administrator', 'ruben.valderrabano@softtek.com');
-INSERT INTO users(username, password, enabled, name, last_name, email)
-VALUES ('user','user123', true, 'Ruben', 'Valderrabano', 'ruben.valderrabano@softtek.com');
+INSERT INTO users(username, password, enabled, name, email, image_url)
+VALUES ('admin','admin123', true, 'Administrator', 'ruben.valderrabano@softtek.com', 'C:\Users\ruben.valderrabano\Desktop\spring-tool-suite-3.7.0.RELEASE-e4.5-win32-x86_64\sts-bundle\pivotal-tc-server-developer-3.1.1.RELEASE\base-instance\wtpwebapps\appacademy\user.PNG');
+INSERT INTO users(username, password, enabled, name, last_name, email, image_url)
+VALUES ('user','user123', true, 'Ruben', 'Valderrabano', 'ruben.valderrabano@softtek.com', 'C:\Users\ruben.valderrabano\Desktop\spring-tool-suite-3.7.0.RELEASE-e4.5-win32-x86_64\sts-bundle\pivotal-tc-server-developer-3.1.1.RELEASE\base-instance\wtpwebapps\appacademy\user.PNG');
 
 INSERT INTO user_roles (username, role)
 VALUES ('admin', 'ROLE_ADMIN');
 INSERT INTO user_roles (username, role)
 VALUES ('user', 'ROLE_USER');
 
-INSERT INTO QUESTION (CATEGORY_ID, TITLE, DESCRIPTION, ANSWERED, USERS_ID, CREATE_DATE)
-VALUES ('product', 'Question 1', 'I relly do not have isea ehat to put in here', false, 1, NOW());
+INSERT INTO QUESTION (CATEGORY, TITLE, DESCRIPTION, ANSWERED, USERS_ID, CREATE_DATE)
+VALUES ('SERVICE', 'Question 1', 'I relly do not have isea ehat to put in here', false, 1, NOW());
 
-INSERT INTO QUESTION (CATEGORY_ID, TITLE, DESCRIPTION, ANSWERED, USERS_ID, CREATE_DATE)
-VALUES ('app', 'Question 2', 'I relly do not have isea ehat to put in here again', false, 1, NOW());
+INSERT INTO QUESTION (CATEGORY, TITLE, DESCRIPTION, ANSWERED, USERS_ID, CREATE_DATE)
+VALUES ('APP', 'Question 2', 'I relly do not have isea ehat to put in here again', false, 1, NOW());
 
-INSERT INTO QUESTION (CATEGORY_ID, TITLE, DESCRIPTION, ANSWERED, USERS_ID, CREATE_DATE)
-VALUES ('product', 'Question 2', 'Once again I do not have isea ehat to put in here', false, 1, NOW());
+INSERT INTO QUESTION (CATEGORY, TITLE, DESCRIPTION, ANSWERED, USERS_ID, CREATE_DATE)
+VALUES ('PRODUCT', 'Question 2', 'Once again I do not have isea ehat to put in here', false, 1, NOW());

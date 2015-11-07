@@ -54,9 +54,9 @@
 				<p>CATEGORY: <c:out value="${question.category}"></c:out></p>
 				<p>ANSWERED: <c:out value="${question.answered}"></c:out></p>
 				
-				<a href="/SpringSecurityDatabase/forum/deleteQuestion?questionId=${question.id}">Delete Question</a>
-				
-				<a href="/SpringSecurityDatabase/forum/updateQuestionToAnswered?questionId=${question.id}">Mark Question as Answered</a>
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
+					<a class="btn btn-danger" href="/SpringSecurityDatabase/forum/deleteQuestion?questionId=${question.id}">Delete Question</a>
+				</sec:authorize>
 				
                 <hr>
 
@@ -95,6 +95,12 @@
 		                        ${comment.description}
 		                    </div>
 		                </div>
+		                
+		                <c:if test="${comment.helpful != true}">
+		                <!--  
+		                	<div>Was this answer helpful?<a class="btn btn-success" href="/SpringSecurityDatabase/forum/answerHelpful?commnetId=${comment.description}&question=${question.id}">yes!</a></div>
+						-->
+						</c:if>
 					</c:forEach>
 		
 				</c:if>
