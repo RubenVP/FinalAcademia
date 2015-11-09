@@ -46,9 +46,7 @@
 		<!-- /.row -->
 	
 		<div class="row">
-		
 			<div class="col-md-4 col-md-offset-4">
-			
 				<div class="text-center">
 			        <div class="btn-group">
 			          <a href="/SpringSecurityDatabase/users" role="tab" data-toggle="tab" class="btn btn-primary"><i class="fa fa-plus"></i>Join As New User</a>
@@ -81,7 +79,6 @@
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 				</form>
 			</div>
-	
 		</div>
         <!-- /.row -->
 
