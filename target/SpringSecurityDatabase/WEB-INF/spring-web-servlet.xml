@@ -24,7 +24,7 @@
 		</property>
 	</bean>
 	
-	 <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	<!--  <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="smtp.gmail.com" />
         <property name="port" value="587" />
         <property name="username" value="ruben.valderrabano@gmail.com" />
@@ -36,30 +36,41 @@
                 <prop key="mail.smtp.starttls.enable">true</prop>
             </props>
         </property>
-    </bean>
+    </bean> --> 
 	
-	<!-- Configure the multipart resolver
+	<!-- Configure the multipart resolver -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="1000000"/>
-    </bean> -->
+    </bean>
     
-    <!-- Mail 
+    <!-- Mail -->
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-	    <property name="host" value="mail.javaacademy.com"/>
+	    <property name="host" value="smtp.gmail.com" />
+        <property name="port" value="587" />
+        <property name="username" value="ruben.valderrabano@gmail.com" />
+        <property name="password" value="58850045" />
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.transport.protocol">smtp</prop>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+            </props>
+        </property>
 	</bean>
 	
-	 this is a template message that we can pre-load with default state 
+	<!-- this is a template message that we can pre-load with default state  --> 
 	<bean id="templateMessage" class="org.springframework.mail.SimpleMailMessage">
-	    <property name="from" value="ruben@javaacademy.com"/>
+	    <property name="from" value="ruben.valderrabano@gmail.com"/>
 	    <property name="subject" value="Question Answered"/>
 	</bean>
 	
 	<bean id="orderManager" class="com.academia.appForum.support.SimpleMessageManager">
 	    <property name="mailSender" ref="mailSender"/>
 	    <property name="templateMessage" ref="templateMessage"/>
-	</bean>-->
+	</bean>
     
 	<mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" />
+	<mvc:resources mapping="forum/resources/**" location="/WEB-INF/resources/" />
 	
 	<mvc:annotation-driven />
 	
