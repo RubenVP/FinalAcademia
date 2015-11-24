@@ -121,4 +121,17 @@ public class QuestionsRepository {
 				.createQuery("SELECT Q FROM QuestionEntity Q WHERE Q.title Like :text", QuestionEntity.class)
 				.setParameter("text", '%' + text + '%').getResultList();
 	}
+
+	public void setAnswerAsHelpful(int commetId) {
+		System.out.println("[REPO] set Answer As Helpful: " + commetId);
+		entityManager.createQuery("UPDATE CommentEntity C SET C.helpful = true WHERE C.id = :commetId")
+				.setParameter("commetId", commetId).executeUpdate();
+	}
+
+	public List<QuestionEntity> findQuestionByTitle(String title) {
+		System.out.println("[REPO] find question by title: " + title);
+
+		return entityManager.createQuery("SELECT Q FROM QuestionEntity Q WHERE Q.title = :title", QuestionEntity.class)
+				.setParameter("title", title).getResultList();
+	}
 }

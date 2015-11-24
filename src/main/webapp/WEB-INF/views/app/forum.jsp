@@ -27,6 +27,9 @@
 
         <div class="row">
        		<div class="col-md-8">
+       		
+       			{{ message }}
+       		
 				<table class="table forum table-striped">
 					<thead>
 				  		<tr>
@@ -142,11 +145,13 @@
     <!-- /.container -->
 
     <!-- jQuery -->
-    <script src="resourses/js/jquery.js"></script>
-
+    <script type="text/javascript" src="javascript/jquery-1.11.3.min.js"></script>
+    <!-- AngularJs -->
+    <script type="text/javascript" src="javascript/angular.min.js"></script>
+    <script type="text/javascript" src="javascript/custom-angular.js"></script>
     <!-- Bootstrap Core JavaScript -->
-    <script src="resourses/js/bootstrap.min.js"></script>
-
+    <script type="text/javascript" src="javascript/bootstrap.min.js"></script>
+    
 </body>
 
 </html>

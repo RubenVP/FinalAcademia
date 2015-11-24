@@ -16,10 +16,10 @@ import com.academia.appForum.repository.QuestionsRepository;
 public class QuestionsService {
 
 	@Autowired
-	QuestionsRepository questionsRepository;
+	private QuestionsRepository questionsRepository;
 
 	@Autowired
-	UsersService usersService;
+	private UsersService usersService;
 
 	public void createNewQuestion(QuestionEntity questionEntity) {
 
@@ -125,6 +125,12 @@ public class QuestionsService {
 		System.out.println("[SERVICE] get custom search questions: " + text);
 
 		return questionsRepository.getCustomSearch(text);
+	}
+
+	public void setAnswerAsHelpful(int commnetId) {
+		System.out.println("[SERVICE] set Answer As Helpful: " + commnetId);
+
+		questionsRepository.setAnswerAsHelpful(commnetId);
 	}
 
 }

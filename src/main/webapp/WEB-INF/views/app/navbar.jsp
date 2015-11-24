@@ -40,11 +40,11 @@
 	            </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')">
-                    	<li>
+                    	<!--<li>
                     		<a class="navbar-brand" href="#">
 						        <img alt="Brand" src="http://placehold.it/64x64" class="brand-img">
 						      </a>
-                    	</li>
+                    	</li>-->
 	                    <li>
 	                        <p class="logged-user"><sec:authentication property="principal.username"/></p>
 	                    </li>

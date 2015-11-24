@@ -13,6 +13,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.academia.appForum.model.UsersEntity;
+import com.academia.appForum.model.QuestionEntity;
+
 @Entity
 @Table(name="comment")
 public class CommentEntity {
@@ -37,6 +40,17 @@ public class CommentEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date answerDate;
 	
+	@Column(name = "HELPFUL", columnDefinition = "BOOLEAN")
+	private Boolean helpful;
+
+	public Boolean getHelpful() {
+		return helpful;
+	}
+
+	public void setHelpful(Boolean helpful) {
+		this.helpful = helpful;
+	}
+
 	public Date getAnswerDate() {
 		return answerDate;
 	}

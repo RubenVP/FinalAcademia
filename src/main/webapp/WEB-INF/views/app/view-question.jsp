@@ -54,30 +54,38 @@
 				<p>CATEGORY: <c:out value="${question.category}"></c:out></p>
 				<p>ANSWERED: <c:out value="${question.answered}"></c:out></p>
 				
-				<a href="/SpringSecurityDatabase/forum/deleteQuestion?questionId=${question.id}">Delete Question</a>
-				
-				<a href="/SpringSecurityDatabase/forum/updateQuestionToAnswered?questionId=${question.id}">Mark Question as Answered</a>
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
+					<a class="btn btn-danger" href="/SpringSecurityDatabase/forum/deleteQuestion?questionId=${question.id}">Delete Question</a>
+				</sec:authorize>
 				
                 <hr>
 
                 <!-- Blog Comments -->
+				<c:forEach items="${commentsList}" var="comment">
+					 <c:if test="${comment.helpful == true}">
+					 	<c:set var="disableComment" value="true" scope="page"></c:set>
+					 </c:if>
+				</c:forEach>
 				
-				<sec:authorize access="hasRole('ROLE_ADMIN')">
-	                <!-- Comments Form -->
-	                <div class="well">
-	                    <h4>Answer:</h4>
-	                    <form:form method="post" action="/SpringSecurityDatabase/forum/addAnswer?questionId=${question.id}" modelAttribute="comment" role="form">
-	
-							<div class="form-group">
-								<form:textarea path="description" class="form-control" rows="3"  maxlenght="2550"/>
-							 </div>
-					
-							<input class="btn btn-primary" type="submit" value="Send Answer"/>
-						</form:form>
-	                </div>
-	
-	                <hr>
-	            </sec:authorize>
+				<c:if test="${empty disableComment}">
+					<sec:authorize access="hasRole('ROLE_ADMIN')">
+		                <!-- Comments Form -->
+		                <div class="well">
+		                    <h4>Answer:</h4>
+		                    <form:form method="post" action="/SpringSecurityDatabase/forum/addAnswer?questionId=${question.id}" modelAttribute="comment" role="form">
+		
+								<div class="form-group">
+									<form:textarea path="description" class="form-control" rows="3"  maxlenght="2550"/>
+									<form:errors  path="description" role="alert"></form:errors>
+								 </div>
+						
+								<input class="btn btn-primary" type="submit" value="Send Answer"/>
+							</form:form>
+		                </div>
+		                
+		                <hr>
+		            </sec:authorize>
+				</c:if>
 
                 <!-- Posted Comments -->
                 <!-- Comment -->
@@ -95,6 +103,10 @@
 		                        ${comment.description}
 		                    </div>
 		                </div>
+		                
+		                <c:if test="${comment.helpful != true}">
+		                	<div>Was this answer helpful?<a class="btn btn-success" href="/SpringSecurityDatabase/forum/answerHelpful?commetId=${comment.id}&question=${question.id}">yes!</a></div>
+						</c:if>
 					</c:forEach>
 		
 				</c:if>

@@ -10,7 +10,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Table(name = "USERS")
@@ -48,7 +48,7 @@ public class UsersEntity {
 	private String imageUrl;
 
 	@Transient
-	private CommonsMultipartFile fileData;
+	private MultipartFile fileData;
 
 	public String getImageUrl() {
 		return imageUrl;
@@ -63,11 +63,11 @@ public class UsersEntity {
 		// TODO Auto-generated constructor stub
 	}
 
-	public CommonsMultipartFile getFileData() {
+	public MultipartFile getFileData() {
 		return fileData;
 	}
 
-	public void setFileData(CommonsMultipartFile fileData) {
+	public void setFileData(MultipartFile fileData) {
 		this.fileData = fileData;
 	}
 

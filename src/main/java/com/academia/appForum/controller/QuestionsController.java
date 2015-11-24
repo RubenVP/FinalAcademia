@@ -5,17 +5,22 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.academia.appForum.model.CategoryEnum;
 import com.academia.appForum.model.CommentEntity;
 import com.academia.appForum.model.MessageEntity;
 import com.academia.appForum.model.QuestionEntity;
+import com.academia.appForum.model.Questions;
 import com.academia.appForum.service.MessageService;
 import com.academia.appForum.service.QuestionsService;
 
@@ -29,19 +34,48 @@ public class QuestionsController {
 	@Autowired
 	private MessageService messageService;
 
-	// @Autowired
-	// private JavaMailSender mailSender;
+	// @RequestMapping(method = RequestMethod.GET)
+	// public ModelAndView getAllQuestions() {
+	//
+	// final List<QuestionEntity> questions =
+	// questionsService.getAllQuestions();
+	//
+	// final ModelAndView modelAndView = new ModelAndView();
+	// modelAndView.setViewName("app/forum");
+	// modelAndView.addObject("questions", questions);
+	//
+	// return modelAndView;
+	// }
 
+	/**
+	 * get View of all questions when page loads at the beginning of the session
+	 * 
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView getAllQuestions() {
-
-		final List<QuestionEntity> questions = questionsService.getAllQuestions();
+	public ModelAndView getAllQuestionsView() {
 
 		final ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("app/forum");
-		modelAndView.addObject("questions", questions);
 
 		return modelAndView;
+	}
+
+	/**
+	 * get all questions when page loads at the beginning of the session with
+	 * JSON object (rest)
+	 * 
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ResponseEntity<Questions> getAllQuestions() {
+
+		final List<QuestionEntity> questionsList = questionsService.getAllQuestions();
+
+		final Questions questions = new Questions();
+		questions.setQuestions(questionsList);
+
+		return new ResponseEntity<Questions>(questions, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/askQuestion", method = RequestMethod.GET)
@@ -54,6 +88,18 @@ public class QuestionsController {
 		return modelAndView;
 	}
 
+	/**
+	 * Gets parameters from the new_questions view and sets the categoryEnum
+	 * field to the correspondent category and the answer field to false
+	 * 
+	 * @param question
+	 * @param bindingResult
+	 * @param category
+	 * @param modelAndView
+	 * @return a new questionEntity, a success Message and to app/new_question
+	 *         view
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/askQuestion", method = RequestMethod.POST)
 	public ModelAndView createNewQuestion(@Valid QuestionEntity question, BindingResult bindingResult,
 			@RequestParam("cat") String category, ModelAndView modelAndView) throws Exception {
@@ -151,18 +197,10 @@ public class QuestionsController {
 
 		final QuestionEntity questionEntity = questionsService.getQuestionById(questionId);
 
+		comment.setHelpful(false);
 		questionsService.addAnswer(comment, questionEntity);
 		messageService.sendMessegeQuestionAndswered(questionEntity);
 		questionsService.updateQuestionToAnswered(questionId);
-
-		// creates a simple e-mail object
-		// SimpleMailMessage email = new SimpleMailMessage();
-		// email.setTo("ruben.valderrabano@gmail.com");
-		// email.setSubject("Your question" + questionEntity.getTitle() + " has
-		// been answered");
-		// email.setText("prueba");
-		// // sends the e-mail
-		// mailSender.send(email);
 
 		final List<CommentEntity> commentsList = questionsService.getAllAnswersByQuestion(questionEntity);
 		modelAndView.addObject("commentsList", commentsList);
@@ -263,6 +301,25 @@ public class QuestionsController {
 
 		modelAndView.setViewName("app/forum");
 		modelAndView.addObject("questions", questions);
+
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/answerHelpful", params = { "commetId", "question" }, method = RequestMethod.GET)
+	public ModelAndView setAnswerAsHelpful(@RequestParam("commetId") int commetId,
+			@RequestParam("question") int questionId) {
+		System.out.println("[CONTROLLER] set Answer As Helpful: " + commetId);
+
+		questionsService.setAnswerAsHelpful(commetId);
+		final QuestionEntity question = questionsService.getQuestionById(questionId);
+
+		final List<CommentEntity> commentsList = questionsService.getAllAnswersByQuestion(question);
+
+		final ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("app/view-question");
+		modelAndView.addObject("commentsList", commentsList);
+		modelAndView.addObject("question", question);
+		modelAndView.addObject("comment", new CommentEntity());
 
 		return modelAndView;
 	}

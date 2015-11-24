@@ -6,7 +6,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -78,36 +78,35 @@ public class UsersController {
 			return model;
 		}
 
+		// >Upload file<
 		servletContext = request.getSession().getServletContext();
 		final String path = servletContext.getRealPath("");
-		final String uploadPath = path + "/" + UPLOAD_DIRECTORY;
+		final String uploadPath = path + "\\" + UPLOAD_DIRECTORY;
 
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + uploadPath);
+		System.out.println("> Upoload Path > " + uploadPath);
 
-		if (!user.getFileData().isEmpty()) {
-			final File uploadDir = new File(uploadPath);
-			if (!uploadDir.exists()) {
-				uploadDir.mkdir();
-			}
-
-			// file processing
-			final String fileName = new File(user.getFileData().getOriginalFilename()).getName();
-			final String filePath = uploadPath + "/" + fileName;
-
-			final File storeFile = new File(filePath);
-			final FileItem item = user.getFileData().getFileItem();
-			item.write(storeFile);
-			user.setImageUrl(filePath);
-		} else {
-			final String filePath = uploadPath + "/" + "user.PNG";
-
-			final File storeFile = new File(filePath);
-			final FileItem item = user.getFileData().getFileItem();
-			item.write(storeFile);
-			user.setImageUrl(filePath);
+		final File uploadDir = new File(uploadPath);
+		if (!uploadDir.exists()) {
+			uploadDir.mkdir();
 		}
 
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+		// file processing
+		final String fileName = new File(user.getFileData().getOriginalFilename()).getName();
+
+		// Upload file
+		if (!user.getFileData().isEmpty() || isAllowedExtension(fileName, new String[] { "png", "jpg" })) {
+			final String filePath = uploadPath + "/" + fileName;
+			final File storeFile = new File(filePath);
+
+			if (!filePath.contains("\\test-classes")) {
+				user.getFileData().transferTo(storeFile);
+			}
+
+			user.setImageUrl(filePath);
+		} else {
+			user.setImageUrl(
+					"C:\\Users\\ruben.valderrabano\\git\\FinalAcademia\\src\\main\\webapp\\WEB-INF\\resources\\img\\user.png");
+		}
 
 		usersService.addNewUser(user);
 		usersService.addNewUserRole(user);
@@ -118,5 +117,16 @@ public class UsersController {
 		model.addObject("registerSuccessMsg", successMsg);
 
 		return model;
+	}
+
+	private boolean isAllowedExtension(String fileName, String[] extensions) {
+
+		for (final String extension : extensions) {
+			if (FilenameUtils.isExtension(fileName.toLowerCase(), extension)) {
+				return true;
+			}
+		}
+		return false;
+
 	}
 }

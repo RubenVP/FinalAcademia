@@ -49,6 +49,17 @@ public class QuestionEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createDate;
 
+	public QuestionEntity() {
+		super();
+	}
+
+	public QuestionEntity(String title, String description, CategoryEnum category) {
+		super();
+		this.title = title;
+		this.description = description;
+		this.category = category;
+	}
+
 	public Date getCreateDate() {
 		return createDate;
 	}

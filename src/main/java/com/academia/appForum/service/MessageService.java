@@ -20,8 +20,12 @@ public class MessageService {
 	@Autowired
 	UsersService usersService;
 
-	public void sendMessegeQuestionAndswered(QuestionEntity questionEntity) {
+	public boolean sendMessegeQuestionAndswered(QuestionEntity questionEntity) {
 		final UsersEntity senderEntity = usersService.getUserInSession();
+
+		if (senderEntity == null)
+			return false;
+
 		final UsersEntity recipientEntity = questionEntity.getUserEntity();
 
 		final String message = "Hello " + recipientEntity.getName() + " your question '" + questionEntity.getTitle()
@@ -31,11 +35,10 @@ public class MessageService {
 
 		messageRepository.createMessage(messageEntity);
 
-		// SimpleMessageManager simpleMessageManager = new
-		// SimpleMessageManager();
-		// simpleMessageManager.sendMessage(messageEntity);
-
 		System.out.println("[SERVICE]send message after answering question");
+
+		return true;
+
 	}
 
 	public List<MessageEntity> getMessagesForUser() {
